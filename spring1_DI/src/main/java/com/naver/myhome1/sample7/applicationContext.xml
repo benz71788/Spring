@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 스프링 환경 설정 파일은 이름은 무엇이든 상관없지만 <beans>를 루트 엘리먼트로 사용합니다.
+	 루트 엘리먼트 beans에는 XML 스키마 관련 정보가 설정됩니다. -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<!-- 
+		bean 생성합니다.
+		List타입 매핑의 경우
+	 -->
+	<bean id="collectionBean" class="com.naver.myhome1.sample7.CollectionBean">
+		<property name="addressList">
+			<set value-type="java.lang.String">
+				<value>서울시 종로구 다동</value>
+				<value>서울시 종로구 인사동</value>
+				<value>서울시 종로구 인사동</value>
+			</set>
+		</property>
+	</bean>
+    	 
+</beans>
+
+
+
+
+
+
+
+

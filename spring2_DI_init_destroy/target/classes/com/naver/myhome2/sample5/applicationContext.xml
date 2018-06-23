@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 스프링 환경 설정 파일은 이름은 무엇이든 상관없지만 <beans>를 루트 엘리먼트로 사용합니다.
+	 루트 엘리먼트 beans에는 XML 스키마 관련 정보가 설정됩니다. -->
+	 
+<!-- 
+	기존에서 추가된 부분
+	annotation 설정을 추가하려면 context관련 네임스페이스와 스키마 위치를 등록해야 합니다.
+	Namespaces 탭에서 'context' 항목 체크하세요
+	xmlns:context="http://www.springframework.org/schema/context"
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.3.xsd"
+ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+		<!-- 추가된 부분 -->
+	<context:annotation-config/>
+	
+	<!-- init-method 속성에서 정의한 메서드는 class속성에 설정된 클래스를 객체 생성한 후에
+	호출합니다. -->
+	<bean id="m3" class="com.naver.myhome2.sample5.MessageBeanImpl"
+		init-method="initMethod">
+		<constructor-arg>
+			<value>Spring</value>
+		</constructor-arg>	<!-- 생성자를 정의해서 name변수에 값 저장 -->	
+		<property name="greeting">
+			<value>안녕하세요~</value>
+		</property>
+		
+	</bean>
+
+	<!-- destroy-method속성은 스프링 컨테이너가 객체를 삭제하기 직전에 호출될
+		 임의의 메서드를 지정할 수 있습니다. -->
+	<bean id="outputter" class="com.naver.myhome2.sample5.FileOutputter"
+		destroy-method="destroyMethod">
+		<property name="filePath">
+			<value>out.txt</value>
+		</property>	
+	</bean> 	 
+</beans>
+
+
+
+
+
+
+
+

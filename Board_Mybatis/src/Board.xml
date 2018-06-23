@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?><!--  SQL 맵퍼 파일은 xml이기 때문에 제일 먼저 xml 선언이 옵니다. -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Board1">
+	
+	<select id="getListCount" resultType="int">
+		select count(*) from board11
+	</select>
+	
+	<select id="getBoardList" parameterType="hashMap" resultType="Board">
+		<![CDATA[
+			select * from (select rownum rnum, BOARD_NUM, BOARD_NAME, BOARD_SUBJECT, BOARD_CONTENT, 
+				BOARD_FILE, BOARD_RE_REF, BOARD_RE_LEV, BOARD_RE_SEQ, BOARD_READCOUNT, BOARD_DATE 
+				from (select * from BOARD11 order by BOARD_RE_REF DESC, BOARD_RE_SEQ ASC))
+					where rnum >= #{startrow} and rnum <= #{endrow}
+		]]>
+	</select>
+	
+	<!-- 
+		jdbcType=VARCHAR : 첨부 파일을 추가 하지 않은 경우 에러 처리해 줍니다.
+		해당 필드가 null인 경우 jdbcType=VARCHAR로 처리하면 null로 설정됩니다.
+		number 타입일 경우는 jdbcType=INTEGER
+	 -->
+	
+	<insert id="boardInsert" parameterType="Board">
+		INSERT INTO BOARD11 (BOARD_NUM, BOARD_NAME, BOARD_PASS, BOARD_SUBJECT, BOARD_CONTENT, 
+			BOARD_FILE, BOARD_RE_REF, BOARD_RE_LEV, BOARD_RE_SEQ, BOARD_READCOUNT, BOARD_DATE)
+			VALUES(BOARD11_SEQ.NEXTVAL, #{BOARD_NAME}, #{BOARD_PASS}, #{BOARD_SUBJECT},
+				#{BOARD_CONTENT}, #{BOARD_FILE, jdbcType=VARCHAR}, BOARD11_SEQ.NEXTVAL, 0, 0, 0, SYSDATE)
+	</insert>
+	
+	
+	<update id="setReadCount" parameterType="int">
+		update BOARD11
+		set BOARD_READCOUNT = BOARD_READCOUNT + 1
+		WHERE BOARD_NUM = #{BOARD_NUM}
+	</update>
+	
+	<select id="getDetail" parameterType="int" resultType="Board">
+		select * from BOARD11 where BOARD_NUM = #{BOARD_NUM}
+	</select>
+	
+	<update id="setReplyCount" parameterType="Board">
+		<![CDATA[
+			update BOARD11
+			set BOARD_RE_SEQ = BOARD_RE_SEQ + 1
+			where BOARD_RE_REF = #{BOARD_RE_REF}
+			and BOARD_RE_SEQ > #{BOARD_RE_SEQ}
+		]]>
+	</update>
+	
+	<insert id="replyInsert" parameterType="Board">
+		insert into BOARD11(BOARD_NUM, BOARD_NAME, BOARD_PASS, BOARD_SUBJECT, BOARD_CONTENT,
+			BOARD_FILE, BOARD_RE_REF, BOARD_RE_LEV, BOARD_RE_SEQ, BOARD_READCOUNT, BOARD_DATE)
+			values(BOARD11_SEQ.NEXTVAL, #{BOARD_NAME}, #{BOARD_PASS}, #{BOARD_SUBJECT},
+				#{BOARD_CONTENT}, #{BOARD_FILE, jdbcType=VARCHAR}, #{BOARD_RE_REF}, #{BOARD_RE_LEV}, #{BOARD_RE_SEQ},
+				#{BOARD_READCOUNT}, SYSDATE)
+	</insert>
+	
+	<select id="isBoardWriter" parameterType="int" resultType="Board">
+		select * from board11 where BOARD_NUM = #{BOARD_NUM}
+	</select>
+	
+	<update id="boardModify" parameterType="Board">
+		update BOARD11
+		set BOARD_SUBJECT = #{BOARD_SUBJECT}, BOARD_CONTENT = #{BOARD_CONTENT}
+		WHERE BOARD_NUM = #{BOARD_NUM}
+	</update>
+	
+	<delete id="boardDelete" parameterType="int">
+		delete from BOARD11
+		where BOARD_NUM = #{num}
+	</delete>
+	
+</mapper>

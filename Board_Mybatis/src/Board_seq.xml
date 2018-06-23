@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Boards">
+	<insert id="insert" parameterType="M">
+		insert into member values (#{id}, #{password}, #{name}, #{age}, #{gender}, #{email})
+	</insert>
+	
+	<insert id="insert" parameterType="BoardBean">
+		<selectKey resultType="int" order="BEFORE"  keyProperty="BOARD_NUM">
+			select board11_seq.nextval from dual
+		</selectKey>
+		insert into board11
+		(board num,
+		board_name, board_pass, board_subject,
+		board_content, board_file,
+		board_re_ref,
+		board_re_lev, board_re_seq, board_readcount,
+		board_date)
+	
+	</insert>
+	<select id="select" resultType="M" parameterType="String" >
+		select * from member where id = #{id}
+	</select>
+	
+<!-- 문법 오류
+	1. where rnum >= #{start}
+		==> 해결법
+		where rnum <![CDATA[	>=	]]> #{start}
+		
+		HTML 문서는 '<', '.', '>'와 같은 마크업 문자들을  파싱해서 읽어들이는 구조입니다.
+		그래서 마크업 문자들을 원래 대로의 의미로 사용하기 위해서
+		'&gt;', '&lt;', '&nbsp;' 등의
+		escape 문자열(escape characte)을 이용해야 하는데 문장이
+		길어지는 문제점이 발생하게 됩니다. 이럴떄 사용하는 것이 바로 CDATA 절입니다.
+		파서는 <![CDATA[ 와 ]]> 사이의 문장을 단순히 문자데이터로 인식하게 됩니다.
+	2. > : &gt;
+	   < : &lt;
+	   바꾸어 보세요
+ -->	
+	<select id="list" parameterType="java.util.Map" resultType="M">
+		select * from
+			(select rownum rnum, BOARD_NUM, BOARD_NAME, BOARD_SUBJECT
+			,
+				)
+	</select>
+	
+	<update id="update" parameterType="M">
+		update member
+		set password = #{password}
+		where id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+		delete from member where id= #{id}
+	</delete>
+</mapper>
+
+
+	

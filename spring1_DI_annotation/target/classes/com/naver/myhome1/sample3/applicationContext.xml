@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 스프링 환경 설정 파일은 이름은 무엇이든 상관없지만 <beans>를 루트 엘리먼트로 사용합니다.
+	 루트 엘리먼트 beans에는 XML 스키마 관련 정보가 설정됩니다. -->
+	 
+<!-- 
+	기존에서 추가된 부분
+	annotation 설정을 추가하려면 context관련 네임스페이스와 스키마 위치를 등록해야 합니다.
+	Namespaces 탭에서 'context' 항목 체크하세요
+	xmlns:context="http://www.springframework.org/schema/context"
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.3.xsd"
+ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- 추가된 부분 -->
+	<context:annotation-config/>
+
+    <!-- bean 생성합니다. -->
+    	 
+    	<bean id="m" class="com.naver.myhome1.sample3.MessageBeanEn"/>
+    	
+    	<bean id="m1" class="com.naver.myhome1.sample3.MessageBeanKo"/>
+    	
+    	<bean id="m2" class="com.naver.myhome1.sample3.MessageMultiple"/>
+    	 
+</beans>
+
+
+
+
+
+
+
+

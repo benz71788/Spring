@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?><!--  SQL 맵퍼 파일은 xml이기 때문에 제일 먼저 xml 선언이 옵니다. -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Members">
+       <insert id="insert" parameterType="M" >
+	   INSERT INTO member 
+           VALUES (#{id},#{password},#{name},#{age},#{gender},#{email})
+	</insert>
+	
+	<select id="idcheck" parameterType="String" resultType="M">
+		select * from member where id = #{id}
+	</select>
+	
+	<select id="getList" resultType="M">
+		select * from member 
+	</select>
+	
+	<delete id="delete" parameterType="String">
+	   delete from member where id = #{id}
+	</delete>
+	
+	<update id="update" parameterType="M">
+	  update member set password = #{password}, name = #{name}, age = #{age}, gender = #{gender}, email = #{email}
+	  	where id = #{id}
+	</update>
+</mapper>

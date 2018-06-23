@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+ "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ 
+ <!-- mybatis 설정 파일의 루트 엘리먼트입니다. -->
+ <configuration>
+ 
+ <!--  <properties> 엘리먼트 :
+ 		프로퍼티 파일을 로딩하려면 <properties>태그를 사용합니다.
+ 		1. 자바의 클래스 경로를 사용하는 방법 : resource 속성을 사용합니다.
+ 		2. 파일 시스템 경로를 사용하는 방법 : url 속성을 사용합니다.
+  -->
+ 	<properties resource="db.properties"/>
+ 	
+ 	<!-- typeAliases 엘리먼트 : 자바 클래스 이름(패키지 이름 포함)에 대한 별명
+ 							SQL맵퍼파일에서 사용할 별명들 입니다.
+ 			-typeAlias태그의 type 속성값은 패키지 이름을 포함한
+ 					
+ 					 -->
+ 	<typeAliases>
+ 		<typeAlias type="model.Member" alias="Member" />
+ 	</typeAliases>
+ 	
+ 	<!-- 
+ 		${driver} : <properties>에서 설정한 파일(db.properties)에서
+ 					driver 프로퍼티 값을 가져옵니다.
+ 		${url}	  : <properties>에서 설정한 파일(db.properties)에서
+ 					url 프로퍼티 값을 가져옵니다.
+ 	
+ 	 -->
+ 	<environments default="development">
+ 		<environment id="development">
+ 			<transactionManager type="JDBC"/>
+ 			<dataSource type="POOLED">
+ 				<property name="driver" value="${driver}" />
+ 				<property name="url" value="${url}"/>
+ 				<property name="username" value="${username}"/>
+ 				<property name="password" value="${password}"/>
+ 			</dataSource>
+ 		</environment>
+ 	</environments>
+ 	<mappers>
+ 		<mapper resource="Member.xml"/>
+ 	</mappers>
+ </configuration>
+

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration >
+ <Appenders>
+  
+   <Console name="console" target="SYSTEM_OUT">
+      <PatternLayout pattern="Root    : %5p [%t] - %m%n"/>
+   </Console> 
+   <Console name="console2" target="SYSTEM_OUT">
+      <PatternLayout pattern="Member1 : %6p [%t] - %m%n"/>
+   </Console>   
+  </Appenders>
+ 
+ <Loggers>
+   
+   <Logger name="Member1"   level="trace"  additivity="false">
+         <AppenderRef ref="console2"/>
+   </Logger>
+   
+    <Root level="debug">
+     <AppenderRef ref="console"/>
+   </Root> 
+ 
+ </Loggers>
+
+</Configuration>

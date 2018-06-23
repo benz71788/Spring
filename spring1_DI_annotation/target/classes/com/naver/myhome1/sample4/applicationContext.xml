@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 스프링 환경 설정 파일은 이름은 무엇이든 상관없지만 <beans>를 루트 엘리먼트로 사용합니다.
+	 루트 엘리먼트 beans에는 XML 스키마 관련 정보가 설정됩니다. -->
+	 
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- 
+		<context:component-scan/>태그를 사용하여 @Component 등 붙은
+			빈 생성 표시자(애노테이션)가 있는 클래스를 검색하라고 선언합니다.
+		
+		<context:component-scan/>를 선언하면 자동으로 
+		<context:annotation-config/>태그의 기능이 자동으로 활성화 되므로
+			제거합니다.
+	 -->
+	 
+	 <!-- 
+	 	com.naver.myhome1.sample4 패키지로 시작하는 모든 패키지를 스캔 대상에
+	 	포함해서 빈으로 등록합니다.
+	  -->
+	<context:component-scan
+		 base-package="com.naver.myhome1.sample4"/>
+    	 
+</beans>
+
+
+
+
+
+
+
+
