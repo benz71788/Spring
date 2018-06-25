@@ -4,14 +4,19 @@
 <html>
 <head>
 <title>Insert title here</title>
-<link href="./resources/css/bbs.css" rel="stylesheet">
+<link href="./resources/css/board.css" rel="stylesheet">
 <script src="./resources/js/jquery-3.3.1.js"></script>
 </head>
 <body>
-	<div id="bbswrite_wrap">
-		<h2 class="bbswrite_title">게시판 입력폼</h2>
-		<form method="post" action="./board_write_ok.nhn">
-			<table id="bbswrite_t">
+	<div id="boardreply_wrap">
+		<h2 class="boardreply_title">댓글 입력폼</h2>
+		<form method="post" action="./board_reply_ok.nhn">
+			<input type="hidden" name="board_num" value="${bcont.board_num}">
+			<input type="hidden" name="board_re_ref" value="${bcont.board_re_ref}">
+			<input type="hidden" name="board_re_lev" value="${bcont.board_re_lev}">
+			<input type="hidden" name="board_re_seq" value="${bcont.board_re_seq}">
+			<input type="hidden" name="page" value="${page}">
+			<table id="boardreply_t">
 				<tr>
 					<th>글쓴이</th>
 					<td>
@@ -27,7 +32,8 @@
 				<tr>
 					<th>글제목</th>
 					<td>
-						<input type="text" name="board_subject" id="board_subject" size="40" class="input_box">
+						<input type="text" name="board_subject" id="board_subject" 
+							size="40" class="input_box" value="Re: ${bcont.board_subject}">
 					</td>
 				</tr>
 				<tr>
@@ -38,7 +44,7 @@
 				</tr>
 			</table>
 			
-			<div id="bbswrite_menu">
+			<div id="boardreply_menu">
 				<input type="submit" value="등록" class="input_button">
 				<input type="reset" value="취소" class="input_button" onclick="$('#board_name').focus();">
 			</div>

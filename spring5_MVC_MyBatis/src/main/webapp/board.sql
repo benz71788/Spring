@@ -19,9 +19,5 @@ create sequence board5_num_seq
 select * from board5;
 
 
-create table BOARD12(
-	num number primary key,
-	name varchar2(20) not null
-);
-
-select * from board12
+insert into board5
+ values(board5_num_seq.nextval, 'hello', '1111', 'asdf', 'asdf', 0, 0, 0, 0, sysdate);

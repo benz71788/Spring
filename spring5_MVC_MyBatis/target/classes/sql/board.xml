@@ -2,22 +2,74 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="Board">
-	<select id="getBoardList" resultType="Board">
-		<![CDATA[
-			select * from (select rownum rnum, BOARD_NUM, BOARD_NAME, BOARD_SUBJECT, BOARD_CONTENT, 
-				BOARD_FILE, BOARD_RE_REF, BOARD_RE_LEV, BOARD_RE_SEQ, BOARD_READCOUNT, BOARD_DATE 
-				from (select * from BOARD5 order by BOARD_RE_REF DESC, BOARD_RE_SEQ ASC))
-		]]>
-	</select>
-	
-	<insert id="boardInsert" parameterType="board">
-		INSERT INTO BOARD5 (BOARD_NUM, BOARD_NAME, BOARD_PASS,
-			BOARD_SUBJECT, BOARD_CONTENT, BOARD_RE_REF, BOARD_RE_LEV,
-			BOARD_RE_SEQ, BOARD_READCOUNT, BOARD_DATE)
+<mapper namespace="Test">
+
+	<insert id="board_insert" parameterType="board">
+		INSERT INTO BOARD5 
+			(BOARD_NUM, BOARD_NAME, BOARD_PASS, BOARD_SUBJECT, BOARD_CONTENT, 
+				BOARD_RE_REF, BOARD_RE_LEV, BOARD_RE_SEQ, BOARD_READCOUNT, BOARD_DATE)
 			VALUES(BOARD5_NUM_SEQ.NEXTVAL, #{board_name}, #{board_pass}, #{board_subject},
 				#{board_content}, BOARD5_NUM_SEQ.NEXTVAL, 0, 0, 0, SYSDATE)
 	</insert>
+	
+	<select id="getBoardList" parameterType="hashMap" resultType="board">
+		<![CDATA[
+			select * 
+			from 
+				(select rownum rnum, BOARD_NUM, BOARD_NAME, BOARD_SUBJECT, BOARD_CONTENT, 
+					BOARD_RE_REF, BOARD_RE_LEV, BOARD_RE_SEQ, BOARD_READCOUNT, BOARD_DATE 
+				from 
+					(select * from BOARD5 order by BOARD_RE_REF DESC, BOARD_RE_SEQ ASC))
+				where rnum >= ((#{page} - 1) * 10 + 1) 
+					and rnum <= (#{page} * 10)
+		]]>
+	</select>
+
+	<select id="getListCount" resultType="int">
+		select count(*) from board5
+	</select>
+	
+	<!-- 게시판 내용보기 -->
+	<select id="board_cont" parameterType="int" resultType="board">
+		select * from BOARD5
+		where BOARD_NUM = #{num}
+	</select>
+	
+	<!-- 게시판 조회수 증가 -->
+	<update id="board_hit" parameterType="int">
+		update BOARD5
+		set BOARD_READCOUNT = BOARD_READCOUNT + 1
+		where BOARD_NUM = #{num}
+	</update>
+	
+	<update id="board_edit" parameterType="board">
+		update BOARD5
+		set BOARD_SUBJECT = #{board_subject}, BOARD_CONTENT = #{board_content}
+		where BOARD_NUM = #{board_num}
+	</update>
+	
+	<delete id="board_delete" parameterType="int">
+		delete from BOARD5
+		where BOARD_NUM = #{num}
+	</delete>
+	
+	<update id="reply_count" parameterType="Board">
+		<![CDATA[
+			update BOARD5
+			set BOARD_RE_SEQ = BOARD_RE_SEQ + 1
+			where BOARD_RE_REF = #{board_re_ref}
+			and BOARD_RE_SEQ > #{board_re_seq}
+		]]>
+	</update>
+	
+	<insert id="reply_insert" parameterType="Board">
+		insert into BOARD5(BOARD_NUM, BOARD_NAME, BOARD_PASS, BOARD_SUBJECT, BOARD_CONTENT,
+			BOARD_RE_REF, BOARD_RE_LEV, BOARD_RE_SEQ, BOARD_READCOUNT, BOARD_DATE)
+			values(BOARD5_NUM_SEQ.NEXTVAL, #{board_name}, #{board_pass}, #{board_subject},
+				#{board_content}, #{board_re_ref}, #{board_re_lev}, #{board_re_seq},
+				#{board_readcount}, SYSDATE)
+	</insert>
+
 </mapper>
 
 
