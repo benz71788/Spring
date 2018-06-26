@@ -32,16 +32,17 @@
 		]]>
 	</select>
 	
-	<select id="bbs_cont" parameterType="int" resultType="bbsbean">
-		select * from bbs6
-		where bbs_num = #{num}
-	</select>
-	
 	<update id="bbs_hit" parameterType="int">
 		update bbs6
 		set bbs_readcount = bbs_readcount + 1
 		where bbs_num = #{num}
 	</update>
+	
+	<select id="bbs_cont" parameterType="int" resultType="bbsbean">
+		select * from bbs6
+		where bbs_num = #{num}
+	</select>
+	
 </mapper>
 
 

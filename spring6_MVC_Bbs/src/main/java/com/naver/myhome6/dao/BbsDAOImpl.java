@@ -46,13 +46,13 @@ public class BbsDAOImpl {
 	/*번호를 기준으로 자료실 내용 가져오기 */
 	public BbsBean getBbsCont(int num) throws Exception{
 		BbsBean bbsbean = new BbsBean();
-		bbsbean = sqlSession.selectOne("Bbs.bbs_cont");
+		bbsbean = sqlSession.selectOne("Bbs.bbs_cont", num);
 		return bbsbean;
 	}
 
 	/*내용보기 할때만 조회수 증가*/
 	public void bbsHit(int num) throws Exception{
-		sqlSession.update("Bbs.bbs_hit");
+		sqlSession.update("Bbs.bbs_hit", num);
 	}
 
 	/*자료실 수정*/

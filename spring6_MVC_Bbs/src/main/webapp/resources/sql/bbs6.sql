@@ -16,5 +16,13 @@ create table bbs6(
 create sequence bbs6_num_seq
 	increment by 1 start with 1
 	
+update bbs6
+set bbs_readcount = bbs_readcount + 1
+where bbs_num = 1
+
+select * from bbs6
+where bbs_num = 1
+
+	
 
 select * from bbs6;
