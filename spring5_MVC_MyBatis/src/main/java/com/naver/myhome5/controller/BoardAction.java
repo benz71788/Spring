@@ -52,7 +52,7 @@ public class BoardAction {
 		
 		//현재 페이지에 보여줄 마지막 페이지 수(10, 20, 30 등 ...);
 		int endpage = startpage + 10 - 1;
-		System.out.println("현재 페이지에 보여줄 시작 페이지 수 = " + endpage);
+		System.out.println("현재 페이지에 보여줄 마지막 페이지 수 = " + endpage);
 		
 		if(endpage > maxpage) {
 			endpage = maxpage;

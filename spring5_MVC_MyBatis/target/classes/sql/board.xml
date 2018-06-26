@@ -12,7 +12,7 @@
 				#{board_content}, BOARD5_NUM_SEQ.NEXTVAL, 0, 0, 0, SYSDATE)
 	</insert>
 	
-	<select id="getBoardList" parameterType="hashMap" resultType="board">
+	<select id="getBoardList" parameterType="int" resultType="board">
 		<![CDATA[
 			select * 
 			from 

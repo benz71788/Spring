@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Bbs">
+	
+	<insert id="bbs_insert" parameterType="bbsbean">
+		insert into bbs6
+			(bbs_num, bbs_name, bbs_pass, bbs_subject, bbs_content, bbs_file, 
+			bbs_re_ref, bbs_re_lev, bbs_re_seq, bbs_readcount, bbs_date, bbs_original)
+		values
+			(bbs6_num_seq.nextval, #{bbs_name}, #{bbs_pass}, #{bbs_subject}, #{bbs_content},
+			#{bbs_file, jdbcType=VARCHAR}, bbs6_num_seq.nextval, 0, 0, 0, sysdate, #{bbs_original, jdbcType=VARCHAR})
+	</insert>
+	
+	<select id="bbs_listCount" resultType="int">
+		select count(*) from bbs6
+	</select>
+	
+	<select id="bbs_getList" parameterType="int" resultType="bbsbean">
+		<![CDATA[
+			select *
+			from
+				(select rownum rnum, bbs_num, bbs_name, bbs_subject, bbs_content,
+				bbs_file, bbs_re_ref, bbs_re_lev, bbs_re_seq, bbs_readcount,
+				bbs_date, bbs_original 
+					from 
+						(select * from bbs6 order by bbs_re_ref desc, bbs_re_seq asc))
+					where rnum >= ((#{page} - 1) * 10 + 1)
+						and rnum <= (#{page} * 10)
+				
+		]]>
+	</select>
+	
+	<select id="bbs_cont" parameterType="int" resultType="bbsbean">
+		select * from bbs6
+		where bbs_num = #{num}
+	</select>
+	
+	<update id="bbs_hit" parameterType="int">
+		update bbs6
+		set bbs_readcount = bbs_readcount + 1
+		where bbs_num = #{num}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
