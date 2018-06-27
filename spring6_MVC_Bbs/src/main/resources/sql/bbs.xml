@@ -43,6 +43,93 @@
 		where bbs_num = #{num}
 	</select>
 	
+	<update id="bbs_edit" parameterType="bbsbean">
+		update bbs6
+		set bbs_subject = #{bbs_subject}, bbs_content = #{bbs_content}, 
+		bbs_file = #{bbs_file, jdbcType=VARCHAR}, bbs_original = #{bbs_original, jdbcType=VARCHAR}
+		where bbs_num = #{bbs_num}
+	</update>
+	
+	<delete id="bbs_delete" parameterType="int">
+		delete from bbs6
+		where bbs_num = #{num}
+	</delete>
+	
+	<update id="ref_count" parameterType="bbsbean">
+		<![CDATA[
+			update bbs6
+			set bbs_re_seq = bbs_re_seq + 1
+			where bbs_re_ref = #{bbs_re_ref}
+			and bbs_re_seq > #{bbs_re_seq}
+		]]>
+	</update>
+	
+	<insert id="reply_insert" parameterType="bbsbean">
+		insert into bbs6
+			(bbs_num, bbs_name, bbs_pass, bbs_subject, bbs_content, bbs_file, 
+			bbs_re_ref, bbs_re_lev, bbs_re_seq, bbs_readcount, bbs_date, bbs_original)
+		values
+			(bbs6_num_seq.nextval, #{bbs_name}, #{bbs_pass}, #{bbs_subject}, #{bbs_content},
+			#{bbs_file, jdbcType=VARCHAR}, #{bbs_re_ref}, #{bbs_re_lev}, #{bbs_re_seq}, #{bbs_readcount},
+			sysdate, #{bbs_original, jdbcType=VARCHAR})
+	</insert>
+	
+	<select id="bbsfind_cnt" parameterType="java.util.Map" resultType="int">
+		select count(*) from bbs6
+		<!-- MyBatis 동적SQL문
+			<where>태그는 where절을 반환합니다.
+			<where>안의 하위 태그를 실행하고 반환값이 있으면 where절을 만들어 반환하고
+			반환값이 없으면 where절을 반환하지 않습니다.
+			 -->
+		<where>
+			<!-- 검색 조건이 없는 경우 -->
+			<if test="find_field == ''">
+			</if>
+			<if test="find_field == 'bbs_name'">
+				bbs_name like #{find_name}
+			</if>
+			<if test="find_field == 'bbs_subject'">
+				bbs_subject like #{find_name}
+			</if>
+			<if test="find_field == 'bbs_content'">
+				bbs_content like #{find_name}
+			</if>
+		</where>
+		
+	</select>
+	
+	<select id="bbsfind_list" parameterType="java.util.Map" resultType="bbsbean">
+		
+			select *
+			from
+				(select rownum rnum, bbs_num, bbs_name, bbs_subject, bbs_content,
+				bbs_file, bbs_re_ref, bbs_re_lev, bbs_re_seq, bbs_readcount,
+				bbs_date, bbs_original 
+					from 
+						(select * from bbs6 
+			<where>
+				<!-- 검색 조건이 없는 경우 -->
+				<if test="find_field == ''">
+				</if>
+				<if test="find_field == 'bbs_name'">
+					bbs_name like #{find_name}
+				</if>
+				<if test="find_field == 'bbs_subject'">
+					bbs_subject like #{find_name}
+				</if>
+				<if test="find_field == 'bbs_content'">
+					bbs_content like #{find_name}
+				</if>
+			</where>			
+		
+		<![CDATA[				
+				order by bbs_re_ref desc, bbs_re_seq asc))
+				where rnum >= ((#{page} - 1) * 10 + 1)
+					and rnum <= (#{page} * 10)
+			
+		]]>
+		
+	</select>
 </mapper>
 
 

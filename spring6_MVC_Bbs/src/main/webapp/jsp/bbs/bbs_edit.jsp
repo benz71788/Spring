@@ -1,52 +1,64 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <title>Insert title here</title>
 <link href="./resources/css/bbs.css" rel="stylesheet">
 <script src="./resources/js/jquery-3.3.1.js"></script>
+<script src="./resources/js/bbs.js"></script>
 </head>
 <body>
 	<div id="bbswrite_wrap">
-		<h2 class="bbswrite_title">°Ô½ÃÆÇ ÀÔ·ÂÆû</h2>
-		<form method="post" action="./board_edit_ok.nhn">
-		<input type="hidden" name="board_num" value="${bcont.board_num}">
+		<h2 class="bbswrite_title">ìë£Œì‹¤ ìˆ˜ì •í¼</h2>
+		<form method="post" action="./bbs_edit_ok.nhn"
+			onsubmit="return check()" enctype="multipart/form-data">
+		<input type="hidden" name="bbs_num" value="${bcont.bbs_num}">
 		<input type="hidden" name="page" value="${page}">
 			<table id="bbswrite_t">
 				<tr>
-					<th>±Û¾´ÀÌ</th>
+					<th>ê¸€ì“´ì´</th>
 					<td>
-						<input type="text" name="board_name" id="board_name" 
-							size="14" class="input_box" value="${bcont.board_name}" readonly>
+						<input type="text" name="bbs_name" id="bbs_name" 
+							size="14" class="input_box" value="${bcont.bbs_name}" readonly>
 					</td>
 				</tr>
 				<tr>
-					<th>ºñ¹Ğ¹øÈ£</th>
+					<th>ë¹„ë°€ë²ˆí˜¸</th>
 					<td>
-						<input type="password" name="board_pass" id="board_pass" 
+						<input type="password" name="bbs_pass" id="bbs_pass" 
 							size="14" class="input_box">
 					</td>
 				</tr>
 				<tr>
-					<th>±ÛÁ¦¸ñ</th>
+					<th>ê¸€ì œëª©</th>
 					<td>
-						<input type="text" name="board_subject" id="board_subject" 
-							size="40" class="input_box" value="${bcont.board_subject}">
+						<input type="text" name="bbs_subject" id="bbs_subject" 
+							size="40" class="input_box" value="${bcont.bbs_subject}">
 					</td>
 				</tr>
 				<tr>
-					<th>±Û³»¿ë</th>
+					<th>ê¸€ë‚´ìš©</th>
 					<td>
-						<textarea name="board_content" id="board_content" rows="8" 
-							cols="50" class="input_box">${bcont.board_content}</textarea>
+						<textarea name="bbs_content" id="bbs_content" rows="8" 
+							cols="50" class="input_box">${bcont.bbs_content}</textarea>
+					</td>
+				</tr>
+				<tr>
+					<th>ì²¨ë¶€ íŒŒì¼</th>
+					<td>
+						<!-- <input type="file" name="uploadfile"> -->
+						<label for="upfile"><img src="./resources/images/file_open.png" alt="íŒŒì¼ì—´ê¸°"></label>
+						<input type="file" id="upfile" name="uploadfile">
+						<span id="filevalue">${bcont.bbs_original}</span>&nbsp;
+						<span id="close"><img src="./resources/images/cancel.png"></span>
 					</td>
 				</tr>
 			</table>
 			
 			<div id="bbswrite_menu">
-				<input type="submit" value="µî·Ï" class="input_button">
-				<input type="reset" value="Ãë¼Ò" class="input_button" onclick="$('#board_name').focus();">
+				<input type="submit" value="ë“±ë¡" class="input_button">
+				<input type="reset" value="ì·¨ì†Œ" class="input_button" onclick="$('#bbs_name').focus();">
 			</div>
 		</form>
 	</div>

@@ -63,37 +63,39 @@ public class BbsServiceImpl implements BbsService{
 	@Override
 	public void editBbs(BbsBean bbsbean) throws Exception {
 		// TODO Auto-generated method stub
+		bbsDAO.editBbs(bbsbean);
 		
 	}
 
 	@Override
 	public void deleteBbs(int bbs_num) throws Exception {
 		// TODO Auto-generated method stub
-		
+		bbsDAO.deleteBbs(bbs_num);
 	}
 
 	@Override
 	public int getListCount3(Map m) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		return bbsDAO.getListCount3(m);
 	}
 
 	@Override
 	public List<BbsBean> getBbsList3(Map m) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return bbsDAO.getBbsList3(m);
 	}
 
 	@Override
 	public void refEdit(BbsBean bbsbean) throws Exception {
 		// TODO Auto-generated method stub
+		bbsDAO.refEdit(bbsbean);
 		
 	}
 
 	@Override
 	public void bbsReplyOk(BbsBean bbsbean) throws Exception {
 		// TODO Auto-generated method stub
-		
+		bbsDAO.bbsReplyOk(bbsbean);
 	}
 
 }

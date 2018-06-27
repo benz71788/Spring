@@ -1,8 +1,5 @@
 package com.naver.myhome6.model;
 
-
-import java.util.Date;
-
 import org.springframework.web.multipart.MultipartFile;
 
 public class BbsBean {

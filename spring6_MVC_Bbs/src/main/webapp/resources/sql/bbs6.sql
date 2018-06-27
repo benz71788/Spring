@@ -23,6 +23,6 @@ where bbs_num = 1
 select * from bbs6
 where bbs_num = 1
 
-	
+delete from bbs6 where bbs_num = 8
 
 select * from bbs6;

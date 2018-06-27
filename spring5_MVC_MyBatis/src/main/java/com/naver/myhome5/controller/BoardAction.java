@@ -121,7 +121,7 @@ public class BoardAction {
 			boardService.boardEdit(bean);
 			
 			return "redirect:/board_cont.nhn?board_num=" 
-			+ bean.getBoard_num() + "&page=" + page + "&state=cont";
+				+ bean.getBoard_num() + "&page=" + page + "&state=cont";
 		}
 		
 		return null;
@@ -161,6 +161,6 @@ public class BoardAction {
 		
 		boardService.refInsert(bean);
 		
-		return "redirect:/board_list.nhn?page" + page;
+		return "redirect:/board_list.nhn?page=" + page;
 	}
 }

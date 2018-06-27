@@ -6,6 +6,8 @@
 <head>
 <title>Insert title here</title>
 <link href="./resources/css/bbs.css" rel="stylesheet">
+<script src="./resources/js/jquery-3.3.1.js"></script>
+<script src="./resources/js/bbs.js"></script>
 </head>
 <body>
 	<div id="bbscont_wrap" style="width:600px">
@@ -28,6 +30,15 @@
 					<textarea rows="8" cols="50">${bcont.bbs_content}</textarea>
 				</td>
 			</tr>
+			<c:if test="${!empty bcont.bbs_file}">
+			<tr>
+				<td>첨부 파일</td>
+				<td>
+					<a href="./download.file?path=${bcont.bbs_file}&original=${bcont.bbs_original}">
+					${bcont.bbs_original}</a>
+				</td>
+			</tr>
+			</c:if>
 		</table>
 		<div id="bbscont_menu" style="margin-left:200px">
 			<input type="button" value="수정" class="input_button"

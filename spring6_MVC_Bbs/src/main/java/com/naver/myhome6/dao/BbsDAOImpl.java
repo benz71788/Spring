@@ -57,32 +57,36 @@ public class BbsDAOImpl {
 
 	/*자료실 수정*/
 	public void editBbs(BbsBean bbsbean) throws Exception{
-		
+		sqlSession.update("Bbs.bbs_edit", bbsbean);
 	}
 
 	/*자료실 삭제*/
 	public void deleteBbs(int bbs_num) throws Exception{
-		
+		sqlSession.delete("Bbs.bbs_delete", bbs_num);
 	}
 
 	/*검색 결과 게시물 수*/
 //	public int getListCount3(String find_name,String find_field) throws SQLException{
 	public int getListCount3(Map m) throws Exception{
-		return 0;
+		int count = 0;
+		count = ((Integer)sqlSession.selectOne("bbsfind_cnt", m)).intValue();
+		return count;
 	}
 
 	/*검색 결과 페이징 목록*/
 	public List<BbsBean> getBbsList3(Map m) throws Exception{
-		return null;
+		List<BbsBean> list = new ArrayList<BbsBean>();
+		list = sqlSession.selectList("bbsfind_list", m);
+		return list;
 	}
 
 	/*답변글 레벨 증가*/
 	public void refEdit(BbsBean bbsbean) throws Exception{
-		
+		sqlSession.update("Bbs.ref_count", bbsbean);
 	}
 
 	/*답변글 저장*/
 	public void bbsReplyOk(BbsBean bbsbean) throws Exception{
-		
+		sqlSession.insert("Bbs.reply_insert", bbsbean);
 	}
 }
