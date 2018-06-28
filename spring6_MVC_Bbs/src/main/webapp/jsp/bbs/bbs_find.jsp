@@ -72,21 +72,21 @@
 					이전&nbsp;
 				</c:if>
 				<c:if test="${page > 1}">
-					<a href="./bbs_list.nhn?page=${page-1}">이전</a>
+					<a href="./bbs_find_ok.nhn?page=${page-1}&find_name=${find_name}&find_field=${find_field}">이전</a>
 				</c:if>
 				<c:forEach var ="a" begin="${startpage}" end="${endpage}">
 					<c:if test="${a == page}">
 						${a}
 					</c:if>
 					<c:if test="${a != page}">
-						<a href="./bbs_list.nhn?page=${a}">${a}</a>
+						<a href="./bbs_find_ok.nhn?page=${a}&find_name=${find_name}&find_field=${find_field}">${a}</a>
 					</c:if>
 				</c:forEach>
 				<c:if test="${page >= maxpage}">
 					&nbsp;다음
 				</c:if>
 				<c:if test="${page < maxpage}">
-					<a href="./bbs_list.nhn?page=${page + 1}">&nbsp;다음</a>
+					<a href="./bbs_find_ok.nhn?page=${page + 1}&find_name=${find_name}&find_field=${find_field}">&nbsp;다음</a>
 				</c:if>
 			</td>
 		</tr>
@@ -101,6 +101,13 @@
 			<tr>
 				<td colspan="5" style="text-align:right">
 					<a href="./bbs_write.nhn">[글쓰기]</a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<select name="line_size">
+						<option value=""></option>
+					</select>
 				</td>
 			</tr>
 	</table>
