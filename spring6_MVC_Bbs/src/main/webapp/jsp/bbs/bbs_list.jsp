@@ -8,6 +8,33 @@
 <link href="./resources/css/bbs.css" rel="stylesheet">
 <script src="./resources/js/jquery-3.3.1.js"></script>
 <script src="./resources/js/bbs.js"></script>
+<script>
+	$(document).ready(function(){
+		$("#view_count").val("${limit}").prop("selected", true);
+		
+		$("#view_count").change(function(){
+			var limit = $("#view_count option:selected").val();
+			$.ajax({
+				type : "POST",
+				data : {"limit" : limit},
+				url : "./bbs_list.nhn",
+				cache : false,
+				headers : {"cache-control" : "no-cache",
+							"pragma" : "no-cache"},
+				success : function(data){
+					alert(data);
+					$("body").html(data);
+				},
+				error : function(request, status, error){
+					console.log("code : " + request.status + "\n" + 
+							"message : " + request.responseText + "\n" +
+							"error : " + error)
+					alert("data-error");
+				}
+			});
+		});
+	});
+</script>
 </head>
 <body>
 <!-- 게시판 리스트 -->
@@ -26,7 +53,7 @@
 			<th width="17%"><div>날짜</div></th>
 			<th width="11%"><div>조회수</div></th>
 		</tr>
-		<c:set var="num" value="${listcount-(page-1) * 10}"/>
+		<c:set var="num" value="${listcount-(page-1) * limit}"/>
 		<c:forEach var="b" items="${bbslist}">
 		<tr>
 			<td>
@@ -101,8 +128,15 @@
 			<tr>
 				<td colspan="5" style="text-align:right">
 					<a href="./bbs_write.nhn">[글쓰기]</a>
+					<select id="view_count">
+						<option value="3">3줄 보기</option>
+						<option value="5">5줄 보기</option>
+						<option value="7">7줄 보기</option>
+						<option value="10" selected>10줄 보기</option>
+					</select>
 				</td>
 			</tr>
+			
 	</table>
 	<div id="bbsfind">
 		<script src="./resources/js/jquery.js"></script>

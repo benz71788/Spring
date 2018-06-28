@@ -13,7 +13,7 @@ public interface BbsService {
 	public int getListCount() throws Exception;
 	
 	/* 자료실 목록과 페이징 */
-	public List<BbsBean> getBbsList(int page) throws Exception ;
+	public List<BbsBean> getBbsList(Map map) throws Exception ;
 
 	/*번호를 기준으로 자료실 내용 가져오기 */
 	public BbsBean getBbsCont(int num) throws Exception;

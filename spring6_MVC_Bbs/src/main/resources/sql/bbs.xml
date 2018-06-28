@@ -17,7 +17,7 @@
 		select count(*) from bbs6
 	</select>
 	
-	<select id="bbs_getList" parameterType="int" resultType="bbsbean">
+	<select id="bbs_getList" parameterType="map" resultType="bbsbean">
 		<![CDATA[
 			select *
 			from
@@ -26,8 +26,8 @@
 				bbs_date, bbs_original 
 					from 
 						(select * from bbs6 order by bbs_re_ref desc, bbs_re_seq asc))
-					where rnum >= ((#{page} - 1) * 10 + 1)
-						and rnum <= (#{page} * 10)
+					where rnum >= ((#{page} - 1) * #{limit} + 1)
+						and rnum <= (#{page} * #{limit})
 				
 		]]>
 	</select>
@@ -124,8 +124,8 @@
 		
 		<![CDATA[				
 				order by bbs_re_ref desc, bbs_re_seq asc))
-				where rnum >= ((#{page} - 1) * 10 + 1)
-					and rnum <= (#{page} * 10)
+				where rnum >= ((#{page} - 1) * #{limit} + 1)
+					and rnum <= (#{page} * #{limit})
 			
 		]]>
 		

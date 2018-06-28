@@ -12,6 +12,7 @@ import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,11 +130,27 @@ public class BbsAction2 {
 	
 	@RequestMapping(value="/bbs_list.nhn")
 	public ModelAndView bbs_list(
-			@RequestParam(value="page", defaultValue="1") int page) throws Exception {
+			@RequestParam(value="page", defaultValue="1") int page,
+			HttpServletRequest request) throws Exception {
 		
 		List<BbsBean> bbslist = new ArrayList<BbsBean>();
 		
 		int limit = 10;	// 한 화면에 출력할 레코드 갯수
+		
+		//자료실 내용 보기 후 목록을 선택했을 때 limit값을 유지합니다.
+		//아래 부분을 주석을 달 경우 limit=10으로 설정합니다.
+		//이전에 설정된 limit가 있는지 체크
+		HttpSession session = request.getSession();
+		if(session.getAttribute("limit") != null) {
+			limit = Integer.parseInt(session.getAttribute("limit").toString());
+		}
+		
+		//변경된 limit가 있는지 체크
+		if(request.getParameter("limit") != null) {
+			limit = Integer.parseInt(request.getParameter("limit"));
+			session.setAttribute("limit", limit);
+			System.out.println("limit=" + limit);
+		}
 		
 		int listcount = bbsService.getListCount();	//총 리스트 수를 받아옴
 		
@@ -151,16 +168,23 @@ public class BbsAction2 {
 			endpage = maxpage;
 		}
 		
-		bbslist = bbsService.getBbsList(page);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("page", page);
+		map.put("limit", limit);
+		
+		bbslist = bbsService.getBbsList(map);
 		
 		ModelAndView mv = new ModelAndView();
+
 		mv.setViewName("/bbs/bbs_list");
+		
 		
 		mv.addObject("page", page);
 		mv.addObject("maxpage", maxpage);
 		mv.addObject("startpage", startpage);
 		mv.addObject("endpage", endpage);
 		mv.addObject("listcount", listcount);
+		mv.addObject("limit", limit);
 		
 		mv.addObject("bbslist", bbslist);
 		
@@ -357,7 +381,7 @@ public class BbsAction2 {
 		return "redirect:/bbs_list.nhn?page=" + page;
 	}
 	
-	@RequestMapping(value="/bbs_find_ok.nhn", method=RequestMethod.GET)
+	@RequestMapping(value="/bbs_find_ok.nhn", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView bbs_find_ok(
 			HttpServletRequest request,
 			HttpServletResponse response,
@@ -367,7 +391,18 @@ public class BbsAction2 {
 			
 		int limit = 10;
 		
+		HttpSession session = request.getSession();
+		if(session.getAttribute("limit") != null) {
+			limit = (Integer) session.getAttribute("limit");
+		}
+		
+		if(request.getParameter("limit") != null) {
+			limit = Integer.parseInt(request.getParameter("limit"));
+			session.setAttribute("limit", limit);
+		}
+		
 		Map<String, Object> m = new HashMap<String, Object>();
+		m.put("limit", limit);
 		m.put("page", page);
 		m.put("find_field", find_field);
 		m.put("find_name", "%" + find_name + "%");
@@ -388,13 +423,17 @@ public class BbsAction2 {
 		
 		List<BbsBean> bbslist = bbsService.getBbsList3(m);
 		
-		ModelAndView model = new ModelAndView("bbs/bbs_find");
+		ModelAndView model = new ModelAndView();
+	
+		model.setViewName("bbs/bbs_find");
+		
 		model.addObject("find_name", find_name);
 		model.addObject("find_field", find_field);
 		model.addObject("startpage", startpage);
 		model.addObject("endpage", endpage);
 		model.addObject("maxpage", maxpage);
 		model.addObject("page", page);
+		model.addObject("limit", limit);
 		model.addObject("listcount", listcount);
 		model.addObject("bbslist", bbslist);
 		

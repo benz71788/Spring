@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?><!--  SQL 맵퍼 파일은 xml이기 때문에 제일 먼저 xml 선언이 옵니다. -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Board1">
+	
+	<select id="board_listCount" resultType="int">
+		select count(*) from board12
+	</select>
+	
+	<!-- 
+		문법 오류
+		1. where rnum >= #{start}
+		 ==> 해결법
+		 	where rnum <![CDATA[ >= ]]> #{start}
+		 	
+		 	HTML 문서는 '<', '.', '>'와 같은 마크업 문자들을 파싱해서 읽어들이는 구조입니다.
+		 	그래서 마크업 문자들을 원래 대로의 의미로 사용하기 위해서
+		 	'&gt;', '&lt;', '&nbsp;' 등의
+		 	escape 문자열(escape character)을 이용해야 하는데 문장이
+		 	길어지는 문제점이 발생하게 됩니다. 이럴때 사용하는 것이 바로 CDATA 절입니다.
+		 	파서는 <![CDATA[ 와 ]]> 사이의 문장을 단순한 문자데이터로 인식하게 됩니다.
+		 	
+		 2. > : &gt;
+		 	< : &lt;
+		 	바꾸어 보세요
+	 -->
+	
+	<select id="board_getList" parameterType="hashMap" resultType="board">
+		<![CDATA[
+			select * from (select rownum rnum, BOARD_NUM, BOARD_NAME, BOARD_SUBJECT, BOARD_CONTENT, 
+				BOARD_FILE, BOARD_RE_REF, BOARD_RE_LEV, BOARD_RE_SEQ, BOARD_READCOUNT, BOARD_DATE 
+				from (select * from board12 order by BOARD_RE_REF DESC, BOARD_RE_SEQ ASC))
+					where rnum >= ((#{page} - 1) * #{limit} + 1)
+						and rnum <= (#{page} * #{limit})
+		]]>
+	</select>
+	
+	<!-- 
+		jdbcType=VARCHAR : 첨부 파일을 추가 하지 않은 경우 에러 처리해 줍니다.
+		해당 필드가 null인 경우 jdbcType=VARCHAR로 처리하면 null로 설정됩니다.
+		number 타입일 경우는 jdbcType=INTEGER
+	 -->
+	
+	<insert id="board_insert" parameterType="board">
+		INSERT INTO board12 (BOARD_NUM, BOARD_NAME, BOARD_PASS, BOARD_SUBJECT, BOARD_CONTENT, 
+			BOARD_RE_REF, BOARD_RE_LEV, BOARD_RE_SEQ, BOARD_READCOUNT, BOARD_FILE, BOARD_ORIGINAL, BOARD_DATE)
+			VALUES(board12_SEQ.NEXTVAL, #{board_name}, #{board_pass}, #{board_subject},
+				#{board_content}, board12_SEQ.NEXTVAL, 0, 0, 0,  
+				#{board_file, jdbcType=VARCHAR},  #{board_original, jdbcType=VARCHAR}, SYSDATE)
+	</insert>
+	
+	
+	<update id="board_hit" parameterType="int">
+		update board12
+		set BOARD_READCOUNT = BOARD_READCOUNT + 1
+		WHERE BOARD_NUM = #{BOARD_NUM}
+	</update>
+	
+	<select id="board_cont" parameterType="int" resultType="board">
+		select * from board12 where BOARD_NUM = #{BOARD_NUM}
+	</select>
+	
+	<update id="ref_count" parameterType="board">
+		<![CDATA[
+			update board12
+			set BOARD_RE_SEQ = BOARD_RE_SEQ + 1
+			where BOARD_RE_REF = #{board_re_ref}
+			and BOARD_RE_SEQ > #{board_re_seq}
+		]]>
+	</update>
+	
+	<insert id="reply_insert" parameterType="board">
+		INSERT INTO board12 (BOARD_NUM, BOARD_NAME, BOARD_PASS, BOARD_SUBJECT, BOARD_CONTENT, 
+			BOARD_RE_REF, BOARD_RE_LEV, BOARD_RE_SEQ, BOARD_READCOUNT, BOARD_FILE, BOARD_ORIGINAL, BOARD_DATE)
+			VALUES(board12_SEQ.NEXTVAL, #{board_name}, #{board_pass}, #{board_subject}, #{board_content}, 
+				board12_seq.nextval, #{board_re_lev}, #{board_re_seq}, #{board_readcount},  
+				#{board_file, jdbcType=VARCHAR},  #{board_original, jdbcType=VARCHAR}, SYSDATE)
+	</insert>
+	
+	<select id="isBoardWriter" parameterType="int" resultType="board">
+		select * from board12 where BOARD_NUM = #{BOARD_NUM}
+	</select>
+	
+	<update id="board_edit" parameterType="board">
+		update board12
+		set BOARD_SUBJECT = #{board_subject}, BOARD_CONTENT = #{board_content}
+		WHERE BOARD_NUM = #{board_num}
+	</update>
+	
+	<delete id="board_delete" parameterType="int">
+		delete from board12
+		where BOARD_NUM = #{num}
+	</delete>
+	
+	<select id="boardfind_cnt" parameterType="java.util.Map" resultType="int">
+		select count(*) from board12
+		<!-- MyBatis 동적SQL문
+			<where>태그는 where절을 반환합니다.
+			<where>안의 하위 태그를 실행하고 반환값이 있으면 where절을 만들어 반환하고
+			반환값이 없으면 where절을 반환하지 않습니다.
+			 -->
+		<where>
+			<!-- 검색 조건이 없는 경우 -->
+			<if test="find_field == ''">
+			</if>
+			<if test="find_field == 'bbs_name'">
+				board_name like #{find_name}
+			</if>
+			<if test="find_field == 'bbs_subject'">
+				board_subject like #{find_name}
+			</if>
+			<if test="find_field == 'bbs_content'">
+				board_content like #{find_name}
+			</if>
+		</where>
+		
+	</select>
+	
+	<select id="boardfind_list" parameterType="java.util.Map" resultType="board">
+		
+			select *
+			from
+				(select rownum rnum, board_num, board_name, board_subject, board_content,
+				board_re_ref, board_re_lev, board_re_seq, board_readcount,
+				board_date, board_file,  board_original 
+					from 
+						(select * from board12 
+			<where>
+				<!-- 검색 조건이 없는 경우 -->
+				<if test="find_field == ''">
+				</if>
+				<if test="find_field == 'bbs_name'">
+					board_name like #{find_name}
+				</if>
+				<if test="find_field == 'bbs_subject'">
+					board_subject like #{find_name}
+				</if>
+				<if test="find_field == 'bbs_content'">
+					board_content like #{find_name}
+				</if>
+			</where>			
+		
+		<![CDATA[				
+				order by board_re_ref desc, board_re_seq asc))
+				where rnum >= ((#{page} - 1) * #{limit} + 1)
+					and rnum <= (#{page} * #{limit})
+		]]>
+		
+	</select>
+	
+</mapper>

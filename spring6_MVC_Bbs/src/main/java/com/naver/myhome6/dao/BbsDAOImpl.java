@@ -37,9 +37,9 @@ public class BbsDAOImpl {
 	}
 	
 	/* 자료실 목록과 페이징 */
-	public List<BbsBean> getBbsList(int page) throws Exception {
+	public List<BbsBean> getBbsList(Map map) throws Exception {
 		List<BbsBean> list = new ArrayList<BbsBean>();
-		list = sqlSession.selectList("Bbs.bbs_getList", page);
+		list = sqlSession.selectList("Bbs.bbs_getList", map);
 		return list;
 	}
 

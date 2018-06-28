@@ -38,10 +38,10 @@ public class BbsServiceImpl implements BbsService{
 	}
 
 	@Override
-	public List<BbsBean> getBbsList(int page) throws Exception {
+	public List<BbsBean> getBbsList(Map map) throws Exception {
 		// TODO Auto-generated method stub
 		List<BbsBean> list = new ArrayList<BbsBean>();
-		list = bbsDAO.getBbsList(page);
+		list = bbsDAO.getBbsList(map);
 		return list;
 	}
 
