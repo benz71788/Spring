@@ -11,6 +11,14 @@
 	</appender>
 	
 	<!-- Application Loggers -->
+	<logger name="Member1">
+		<level value="trace" />
+	</logger>
+	
+	<logger name="Board1">
+		<level value="trace" />
+	</logger>
+	
 	<logger name="com.naver.board">
 		<level value="info" />
 	</logger>

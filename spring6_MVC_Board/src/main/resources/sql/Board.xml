@@ -84,7 +84,8 @@
 	
 	<update id="board_edit" parameterType="board">
 		update board12
-		set BOARD_SUBJECT = #{board_subject}, BOARD_CONTENT = #{board_content}
+		set BOARD_SUBJECT = #{board_subject}, BOARD_CONTENT = #{board_content},
+			BOARD_FILE = #{board_file}, BOARD_ORIGINAL = #{board_original}
 		WHERE BOARD_NUM = #{board_num}
 	</update>
 	

@@ -45,6 +45,7 @@ $(document).ready(function(){
 	
 	$('#close').click(function(){
 		$('#filevalue').text('');
+		$('#upfile').val("");
 		$(this).css('display', 'none');
 	})
 	

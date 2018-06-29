@@ -23,6 +23,34 @@
 	
 	<context:component-scan base-package="com.naver.board" />
 	
-	
+	<!-- 
+		특정 URL로 요청시 Controller로 가는 요청을 가로채는 역할을 합니다.
+	 -->
+	 <interceptors>
+	 	<interceptor>
+	 		<mapping path="/*.nhn"/>
+	 		<beans:bean class="com.naver.board.interceptor.Interceptor_pre"/>
+	 	</interceptor>
+	 </interceptors>
+	 
+	 <!-- 
+	 	<mvc:mapping>은 Ant 경로 패턴을 사용할 수 있습니다.
+	 	Ant 패턴은 *, **, ?의 세 가지 특수 문자를 이용해서 경로를 표현하는 패턴으로
+	 	세 가지 문자는 다음의 의미를 갖습니다.
+	 	
+	 	* : 0개 또는 그 이상의 글자를
+	 	? : 1개 글자
+	 	** : 0개 또는 그 이상의 디렉토리 경로
+	 	
+	 	예1) /member/?*.info
+	 		=> /member/로 시작하고 확장자가 .info로 끝나는 모든 경로를 의미합니다.
+	 		
+	 	예2) /member/a?.nhn
+	 		=> /member/로 시작하고 a뒤에 한개의 글자가 오고 .nhn으로 끝나는 모든 경로를 의미합니다.
+	 	
+	 	예3) /member/**/file
+	 		=> /member?로 시작하고 중간에 0개 이상의 중간 경로가 존재하며 /file로 끝나는 모든 경로를 의미합니다.
+	 			/member/file, /member/login/file, /member/login/to/file ...
+	  -->
 	
 </beans:beans>

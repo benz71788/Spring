@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+<!-- join_file=#{join_file, jdbcType=VARCHAR} ,join_original=#{join_original, jdbcType=VARCHAR} 
+     join_file=#{join_file}, join_original=#{join_original} -->
+     
+     <settings>
+       <setting name="jdbcTypeForNull" value="NULL"/>    
+    </settings>
+    
+	<typeAliases>
+		 <typeAlias alias="member"  
+		            type="com.naver.myhome7.model.MemberBean" />	
+		 <typeAlias alias="Zipcode" 
+		            type="com.naver.myhome7.model.ZipcodeBean2" />	
+	</typeAliases>
+ 
+
+	<mappers>
+		<mapper resource="sql/member.xml" />
+	</mappers>
+
+</configuration>
+
+
+
+
+
+
+
+
+
+
+

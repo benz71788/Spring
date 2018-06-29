@@ -65,7 +65,6 @@ public class BoardController {
 			method=RequestMethod.POST)
 	public String board_write_ok(BoardBean board) throws Exception{
 		MultipartFile uploadfile = board.getUploadfile();
-		
 		if(!uploadfile.isEmpty()) {
 			//원래 파일명 구해오기
 			String fileName = uploadfile.getOriginalFilename();
@@ -240,7 +239,6 @@ public class BoardController {
 			out.println("</script>");
 		} else {	//비번이 같다면
 			MultipartFile uploadfile = bean.getUploadfile();
-			
 			if(!uploadfile.isEmpty()) {
 				File delFile = new File(saveFolder + board.getBoard_file());
 				if(delFile.exists()) {
