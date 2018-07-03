@@ -30,36 +30,38 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<ZipcodeBean2> findZipcode(String dong) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return memberDAO.findZipcode(dong);
 	}
 
 	@Override
 	public MemberBean findpwd(Map pm) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return memberDAO.findpwd(pm);
 	}
 
 	@Override
 	public void insertMember(MemberBean m) throws Exception {
 		// TODO Auto-generated method stub
+		memberDAO.insertMember(m);
 		
 	}
 
 	@Override
 	public MemberBean userCheck(String id) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return memberDAO.userCheck(id);
 	}
 
 	@Override
 	public void deleteMember(MemberBean delm) throws Exception {
 		// TODO Auto-generated method stub
-		
+		memberDAO.deleteMember(delm);
 	}
 
 	@Override
 	public void updateMember(MemberBean member) throws Exception {
 		// TODO Auto-generated method stub
+		memberDAO.updateMember(member);
 		
 	}
     

@@ -4,6 +4,7 @@ public class ZipcodeBean {
 
 	private String zipcode;
 	private String addr;
+	
 	public String getZipcode() {
 		return zipcode;
 	}

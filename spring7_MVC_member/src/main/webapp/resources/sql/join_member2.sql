@@ -28,5 +28,7 @@ increment by 1 start with 1 nocache;
 
 select * from join_member2;
 
+delete from join_member2;
+
 
 
