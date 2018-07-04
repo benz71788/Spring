@@ -9,12 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,20 +35,38 @@ public class MemberAction {
 	private MemberService memberService;
 	
 	//배포시 필요한 경로
-//	private String saveFoler = "D:/workspace-sts/spring7_MVC_member/src/main/webapp/resources/upload";
-	private String saveFolder = "D:\\workspace-sts\\spring7_MVC_member\\src\\main\\webapp\\resources\\upload";
+//	private String saveFolder = "C:/Program Files/Apache Software Foundation/Tomcat 8.5/webapps/myhome7/resources/upload";
+	private String saveFolder = "D:\\workspace-sts\\Spring\\spring7_MVC_member\\src\\main\\webapp\\resources\\upload";
 	
+	
+	/*
+	 * 수정 부분
+	 * 	@CookieValue(value="id", required=false) Cookie readCookie
+	 * 	이름이 saveid인 쿠키를 Cookie 타입으로 전달받습니다.
+	 * 	지정한 이름의 쿠키가 존재하지 않을 수도 있기 때문에 required=false로 설정해야 합니다.
+	 * 	즉, id 기억하기를 선택하지 않을 수도 있기 때문에 required=false로 설정해야 합니다.
+	 * 	required=true 상태에서 지정한 이름을 가진 쿠키가 존재하지 않으면 스프링 MVC는 익셉션을 발생시킵니다.
+	 */
 	
 	/*로그인 폼 뷰*/
 	@RequestMapping(value="/member_login.nhn")
-	public String member_login(HttpServletRequest request,
-			HttpServletResponse response) throws Exception{
+	public ModelAndView member_login(
+			ModelAndView mv,
+			HttpServletRequest request,
+			HttpServletResponse response,
+			@CookieValue(value="saveid", required=false) Cookie readCookie) throws Exception{
 		
-		return "member/member_login";
+		if(readCookie != null) {
+			mv.addObject("saveid", readCookie.getValue());
+		}
+		mv.setViewName("member/member_login");
+		
+		return mv;
 		//member 폴더의 member_login.jsp 뷰 페이지 실행
 	}
 	
-	@RequestMapping(value="/member_login_ok.nhn")
+	@RequestMapping(value="/member_login_ok.nhn", 
+			method= {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView member_login_ok(
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
@@ -74,6 +94,16 @@ public class MemberAction {
 				String join_file = m.getJoin_file();
 				session.setAttribute("join_name", join_name);
 				session.setAttribute("join_file", join_file);
+				
+				//"saveid"라는 이름의 쿠기에 id의 값을 저장한 쿠키를 생성합니다.
+				Cookie savecookie = new Cookie("saveid", id);
+				if(request.getParameter("saveid") != null) {
+					savecookie.setMaxAge(60 * 60);
+				} else {
+					System.out.println("쿠키저장 : 0");
+					savecookie.setMaxAge(0);
+				}
+				response.addCookie(savecookie);
 				
 				//jsp폴더의 view.jsp로 이동
 				ModelAndView loginM = new ModelAndView("view");
@@ -326,6 +356,9 @@ public class MemberAction {
 		
 		MemberBean bean = memberService.userCheck(m.getJoin_id());
 		MultipartFile upFile = m.getJoin_profile();
+		
+		String fileName1 = upFile.getOriginalFilename();
+		System.out.println("hihi" + fileName1 + "hihi");
 		if(!upFile.isEmpty()) {
 			File delFile = new File(saveFolder + bean.getJoin_file());
 			if(delFile.exists()) {
@@ -383,9 +416,18 @@ public class MemberAction {
 			
 			//바뀐 파일명으로 저장
 			m.setJoin_file(fileDBName);
+			
+		} else if(m.getJoin_original() != null) {//변경하지 않았지만 이전 파일 그대로인 경우
+												//데이터 베이스에 있는 내용 그대로 적용합니다.
+			m.setJoin_file(bean.getJoin_file());
+		} else if(m.getJoin_original() == null) {//파일 제거 선택한 경우
+			File DelFile = new File(saveFolder + bean.getJoin_file());
+			if(DelFile.exists()) {	//기존이진파일이 존재하면
+				DelFile.delete();	//기존 이진파일 삭제
+			}
 		}
 		
-		this.memberService.updateMember(m);
+		memberService.updateMember(m);
 		
 		ModelAndView model = new ModelAndView("view");
 		
@@ -414,6 +456,7 @@ public class MemberAction {
 		return model;
 	}
 	
+	
 	@RequestMapping(value="/member_del_ok.nhn")
 	public void member_del_ok(
 			MemberBean bean,
@@ -421,18 +464,36 @@ public class MemberAction {
 			HttpServletResponse response) throws Exception {
 		
 		response.setContentType("text/html;charset=UTF-8");	
+		PrintWriter out = response.getWriter();
 		HttpSession session = request.getSession();
-		String id = (String) session.getAttribute("id");
+		String id = request.getParameter("join_id").trim();
+		String pass = request.getParameter("join_pwd").trim();
+		String del_cont = request.getParameter("join_delcont").trim();
 		
-		MemberBean member = new MemberBean();
-		member.setJoin_id(id);
-		member.setJoin_name(bean.getJoin_name());
-		member.setJoin_pwd(bean.getJoin_pwd());
-		member.setJoin_delcont(bean.getJoin_delcont());
+		MemberBean member = this.memberService.userCheck(id);
+		if(!member.getJoin_pwd().equals(pass)) {
+			out.println("<script>");
+			out.println("alert('비번이 다릅니다.!')");
+			out.println("history.back()");
+			out.println("</script>");
+		} else {
+			String fname = member.getJoin_file();
+			
+			if(fname != null) {
+				File delFile = new File(saveFolder + fname);
+				delFile.delete();
+			}
+		}
 		
-		memberService.deleteMember(member);
+		MemberBean delm = new MemberBean();
+		delm.setJoin_id(id);
+		delm.setJoin_delcont(del_cont);
 		
-		response.sendRedirect("./member_login.nhn");
+		this.memberService.deleteMember(delm);
+		
+		session.invalidate();
+		
+		response.sendRedirect("member_login.nhn");
 	}
 	
 	@RequestMapping(value="/member_logout.nhn")

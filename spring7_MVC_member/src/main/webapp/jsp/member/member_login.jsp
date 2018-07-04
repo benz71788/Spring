@@ -24,11 +24,42 @@
 			<table id="login_t">
 				<tr>
 					<th>아이디</th>
-					<td><input type="text" name="id" id="id" size="20" class="input_box"></td>
+				<%--
+					<c:if test="${empty id}">
+						<td><input name="id" id="id" size="15" class="input_box"></td>
+					</c:if>	
+					<c:if test="${!empty id}">
+						<td><input name="id" id="id" size="15" class="input_box"
+								value="${id}"></td>
+					</c:if>
+				--%>
+					<td><input type="text" name="id" id="id" size="20" class="input_box"
+					<c:if test="${!empty saveid}">
+						value="${saveid}"
+					</c:if>
+						></td>
 				</tr>
 				<tr>
 					<th>비밀번호</th>
 					<td><input type="password" name="pwd" id="pwd" size="20" class="input_box"></td>
+				</tr>
+				<tr>
+					<th>아이디 기억하기</th>
+				<%--
+					<c:if test="${empty id}">
+						<td><input type="checkbox" name="saveid" id="saveid"
+								size="15"></td>
+					</c:if>
+					<c:if test="${!empty id}">
+						<td><input type="checkbox" name="saveid" id="saveid"
+								size="15" checked></td>
+					</c:if>
+				--%>
+					<td><input type="checkbox" name="saveid" id="saveid"
+					<c:if test="${!empty saveid}">
+						checked
+					</c:if>
+						></td>
 				</tr>
 			</table>
 			<div id="login_menu">

@@ -6,6 +6,12 @@
 	<select id="login_check" parameterType="String" resultType="member">
 		select * from join_member2 
 		where join_id = #{join_id}
+		and	join_state = 1
+	</select>
+	
+	<select id="login_double_check" parameterType="String" resultType="member">
+		select * from join_member2
+		where join_id = #{id}
 	</select>
 	
 	<!-- 우편번호 검색 -->
@@ -50,8 +56,7 @@
     		join_state = 2,
     		join_deldate = sysdate
     	where join_id = #{join_id}
-    	and join_name = #{join_name}
-     	and join_pwd = #{join_pwd}
+  
     </delete>
     
 
