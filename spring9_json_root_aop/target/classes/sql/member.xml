@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="Test">
+
+	<select id="select_whereid" parameterType="int" resultType="member">
+		select * from products where id = #{id}
+	</select>
+	
+	<!-- 자료 삽입 -->
+	<!-- 
+		1. 삽입한 ID의 값을 사용하고 할 때 <selectKey>를 사용합니다.
+		2. 
+			keyProperty="id":
+				<selectKey> 엘리먼트에 안에 있는 sql문을 실행한 후 결과를 setId()에 저장합니다.
+				parameterType="member"에 setId()에 존재해야 하며 이 메서드에 저장합니다.
+			order="BEFORE" : insert 실행 전에 select문을 실행하라는 의미입니다.
+			order="AFTER" : insert 실행 후에 select문을 실행하라는 의미입니다.
+			
+		3. 여기서 구한 id 값이 아래의 insert문 실행시에 적용됩니다.
+			INSERT INTO products
+			VALUES (#{id}, #{name}, #{modelnumber}, #{series})
+			
+		4. JsonAction.java의 save = service.get_whereid(save.getId());
+			setId()로 저장한 값을 getId()로 사용하고 있습니다.
+	 -->
+	
+	<insert id="data_insert" parameterType="member">
+		<selectKey keyProperty="id" order="BEFORE" resultType="int">
+			select nvl(max(id), 0) + 1
+			from products
+		</selectKey>
+		insert into products
+		values(#{id}, #{name}, #{modelnumber}, #{series})
+	</insert>
+	
+	<select id="select_all" resultType="member">
+		select * from products order by id
+	</select>
+
+</mapper>
+
+
+
+
+
+
+
+
