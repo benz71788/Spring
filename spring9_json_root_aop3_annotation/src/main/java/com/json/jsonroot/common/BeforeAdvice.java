@@ -19,7 +19,7 @@ public class BeforeAdvice {
 	 * 이 메서드는 몸체가 비어있는 메서드로 단순히 포인터 컷을 식별하기 위한 이름으로만 사용됩니다.
 	 */
 	//Pointcut
-	@Pointcut("execution(* com.json.jsonroot..*Impl.get*(..))")
+	@Pointcut("execution(* com.json.jsonroot..*Impl2.get*(..))")
 	public void getPointcut() {}
 	
 	/*

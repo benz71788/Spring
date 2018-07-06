@@ -1,0 +1,34 @@
+
+ ***** 서버에 배포하면 회원정보 수정에 따른 이미지는 바로 적용됩니다. *****
+ 1.sts에서 사용하는 톰캣을 중지합니다.
+ 2. MemberAction.java의 경로를 톰캣에 맞추어 수정합니다.
+   //배포시 필요한 경로
+	private String saveFolder="C:/Program Files/Apache Software Foundation/Tomcat 8.5/webapps/myhome7/resources/upload";
+
+	
+ 배포 방법 
+  1. 프로젝트 이름에서 오른쪽 마우스 버튼 클릭 후 Run As -> 8. Maven Install
+  
+  2. 프로젝트의 target 폴더를 살펴보면 
+      myhome7-1.0.0-BUILD-SNAPSHOT.war 파일이 생성되었음을 확인 할 수 있습니다.
+      즉, pom.xml이 아래와 같은 경우 생성 파일명은  "artifactId" + "-1.0.0-BUILD-SNAPSHOT.war" 입니다.
+       
+       <modelVersion>4.0.0</modelVersion>
+	<groupId>com.naver</groupId>
+	<artifactId>myhome7</artifactId>
+	<name>spring7_mvc_member</name>
+	<packaging>war</packaging>
+	<version>1.0.0-BUILD-SNAPSHOT</version>
+	
+  3. myhome7-1.0.0-BUILD-SNAPSHOT.war의 이름을 myhome7.war로 변경합니다.
+  
+  4. 3번의 파일을 톰캣 webapp폴더 안에 붙여 넣기 합니다.
+         예) C:\Program Files\Apache Software Foundation\Tomcat 8.5\webapps	
+     
+  5. 관리자 모드로 cmd창을 실행합니다.
+     C:\Program Files\Apache Software Foundation\Tomcat 8.5\bin>startup
+     
+  6. 브라우저의 주소창에 다음과 같이 입력합니다.
+     http://localhost:8088/myhome7/    
+     
+ 

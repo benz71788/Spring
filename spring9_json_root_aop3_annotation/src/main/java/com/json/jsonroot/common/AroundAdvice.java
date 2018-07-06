@@ -4,6 +4,10 @@ import java.util.Arrays;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
 //JoinPoint 인터페이스의 메서드
@@ -26,7 +30,25 @@ import org.springframework.util.StopWatch;
  * ProceedingJoinPoint 객체를 매개 변수로 받아 proceed()메서드를 통해서
  * 비즈니스 메서드를 호출할 수 있습니다.
  */
+@Service
+@Aspect //@Aspect가 설정된 클래스에는 Pointcut과 Advice를 결합하는 설정이 있어야 합니다.
 public class AroundAdvice {
+	/*
+	 * @Pointcut을 설정합니다.
+	 * 하나의 Advice 클래스 안에 여러 개의 포인트 컷을 선언할 수 있습니다.
+	 * 여러 개의 포인트 컷을 식별하기 위해 참조 메서드를 이용합니다.
+	 * 이 메서드는 몸체가 비어있는 메서드로 단순히 포인터 컷을 식별하기 위한 이름으로만 사용됩니다.
+	 */
+	//Pointcut
+	@Pointcut("execution(* com.json.jsonroot..*Impl2.set*(..))")
+	public void getPointcut() {}
+	
+	/*
+	 * @Around : 비즈니스 메서드 실행 전, 후에 동작합니다.
+	 * @Around("getPointcut()") : getPointcut() 참조 메서드로 지정한 메서드가 싱행 전과 후에
+	 * 							Advice의 aroundLog가 호출됩니다.
+	 */
+	@Around("getPointcut()")
 	public Object aroundLog(ProceedingJoinPoint proceeding) throws Throwable {
 		
 		System.out.println("========>AroundAdvice의 before: 비즈니스 메서드 수행 전 입니다.");
